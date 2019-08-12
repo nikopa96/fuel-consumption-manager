@@ -1,25 +1,25 @@
 package com.fuelconsumptionmanager.fuelconsumptionmanager.controller;
 
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumption;
+import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionReport;
+import com.fuelconsumptionmanager.fuelconsumptionmanager.model.MonthlyExpense;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.service.FuelConsumptionService;
-import com.fuelconsumptionmanager.fuelconsumptionmanager.utils.ValidatedList;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
+@Validated
 @RestController
 @RequestMapping(path = "fuelConsumption")
+@RequiredArgsConstructor
 public class FuelConsumptionController {
 
-    private final FuelConsumptionService fuelConsumptionService;
-
-    @Autowired
-    public FuelConsumptionController(FuelConsumptionService fuelConsumptionService) {
-        this.fuelConsumptionService = fuelConsumptionService;
-    }
+    @NonNull
+    private FuelConsumptionService fuelConsumptionService;
 
     @GetMapping(path = "/getAll")
     @CrossOrigin
@@ -42,25 +42,25 @@ public class FuelConsumptionController {
 
     @GetMapping(path = "/getMonthlyExpenses")
     @CrossOrigin
-    public List<Map<String, Object>> getMonthlyExpenses() {
+    public List<MonthlyExpense> getMonthlyExpenses() {
         return fuelConsumptionService.getMonthlyExpenses();
     }
 
     @GetMapping(path = "/getMonthlyExpenses/{driverId}")
     @CrossOrigin
-    public Map<String, Object> getMonthlyExpensesByDriverId(@PathVariable("driverId") Long driverId) {
+    public List<MonthlyExpense> getMonthlyExpensesByDriverId(@PathVariable("driverId") Long driverId) {
         return fuelConsumptionService.getMonthlyExpensesByDriverId(driverId);
     }
 
     @GetMapping(path = "/getMonthlyFuelConsumption")
     @CrossOrigin
-    public List<Map<String, Object>> getMonthlyFuelConsumption() {
+    public List<FuelConsumptionReport> getMonthlyFuelConsumption() {
         return fuelConsumptionService.getMonthlyFuelConsumption();
     }
 
     @GetMapping(path = "/getMonthlyFuelConsumption/{driverId}")
     @CrossOrigin
-    public List<Map<String, Object>> getMonthlyFuelConsumptionByDriverId(@PathVariable("driverId") Long driverId) {
+    public List<FuelConsumptionReport> getMonthlyFuelConsumptionByDriverId(@PathVariable("driverId") Long driverId) {
         return fuelConsumptionService.getMonthlyFuelConsumptionByDriverId(driverId);
     }
 

@@ -2,23 +2,21 @@ package com.fuelconsumptionmanager.fuelconsumptionmanager.service;
 
 import com.fuelconsumptionmanager.fuelconsumptionmanager.calculator.ConsumptionCalculator;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumption;
+import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionReport;
+import com.fuelconsumptionmanager.fuelconsumptionmanager.model.MonthlyExpense;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.repository.FuelConsumptionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class FuelConsumptionService {
 
-    private final FuelConsumptionRepository fuelConsumptionRepository;
-
-    @Autowired
-    public FuelConsumptionService(FuelConsumptionRepository fuelConsumptionRepository) {
-        this.fuelConsumptionRepository = fuelConsumptionRepository;
-    }
+    @NonNull
+    private FuelConsumptionRepository fuelConsumptionRepository;
 
     public List<FuelConsumption> getAllFuelConsumptions() {
         return fuelConsumptionRepository.findAll();
@@ -32,41 +30,38 @@ public class FuelConsumptionService {
         return fuelConsumptionRepository.findAllByMonthNumberAndDriverId(monthNumber, driverId);
     }
 
-    public List<Map<String, Object>> getMonthlyExpenses() {
+    public List<MonthlyExpense> getMonthlyExpenses() {
         List<FuelConsumption> fuelConsumptions = fuelConsumptionRepository.findAll();
         ConsumptionCalculator consumptionCalculator = new ConsumptionCalculator();
 
         return consumptionCalculator.getMoneyExpensesByMonths(fuelConsumptions);
     }
 
-    public Map<String, Object> getMonthlyExpensesByDriverId(Long driverId) {
+    public List<MonthlyExpense> getMonthlyExpensesByDriverId(Long driverId) {
         List<FuelConsumption> fuelConsumptions = fuelConsumptionRepository.findAllByDriverId(driverId);
         ConsumptionCalculator consumptionCalculator = new ConsumptionCalculator();
 
-        Map<String, Object> monthlyExpenses = new HashMap<>();
-        monthlyExpenses.put("driverId", driverId);
-        monthlyExpenses.put("expenses", consumptionCalculator.getMoneyExpensesByMonths(fuelConsumptions));
-
-        return monthlyExpenses;
+        return consumptionCalculator.getMoneyExpensesByMonths(fuelConsumptions);
     }
 
-    public List<Map<String, Object>> getMonthlyFuelConsumption() {
+    public List<FuelConsumptionReport> getMonthlyFuelConsumption() {
         List<FuelConsumption> fuelConsumptions = fuelConsumptionRepository.findAll();
         ConsumptionCalculator consumptionCalculator = new ConsumptionCalculator();
 
-        return consumptionCalculator.getFuelConsumptionStatistic(fuelConsumptions);
+        return consumptionCalculator.getMonthlyFuelConsumptionReports(fuelConsumptions);
     }
 
-    public List<Map<String, Object>> getMonthlyFuelConsumptionByDriverId(Long driverId) {
+    public List<FuelConsumptionReport> getMonthlyFuelConsumptionByDriverId(Long driverId) {
         List<FuelConsumption> fuelConsumptions = fuelConsumptionRepository.findAllByDriverId(driverId);
         ConsumptionCalculator consumptionCalculator = new ConsumptionCalculator();
 
-        return consumptionCalculator.getFuelConsumptionStatistic(fuelConsumptions);
+        return consumptionCalculator.getMonthlyFuelConsumptionReports(fuelConsumptions);
     }
 
     public FuelConsumption addFuelConsumption(FuelConsumption fuelConsumption) {
         if (fuelConsumption.getTotalPriceInEUR() == null) {
-            fuelConsumption.setTotalPriceInEUR(fuelConsumption.getVolumeInLiters() * fuelConsumption.getPricePerLiterInEUR());
+            fuelConsumption.setTotalPriceInEUR(fuelConsumption.getVolumeInLiters()
+                    .multiply(fuelConsumption.getPricePerLiterInEUR()));
         }
 
         fuelConsumptionRepository.save(fuelConsumption);
@@ -76,7 +71,8 @@ public class FuelConsumptionService {
     public List<FuelConsumption> addMultipleFuelConsumptions(List<FuelConsumption> fuelConsumptions) {
         fuelConsumptions.forEach(fuelConsumption -> {
             if (fuelConsumption.getTotalPriceInEUR() == null) {
-                fuelConsumption.setTotalPriceInEUR(fuelConsumption.getVolumeInLiters() * fuelConsumption.getPricePerLiterInEUR());
+                fuelConsumption.setTotalPriceInEUR(fuelConsumption.getVolumeInLiters()
+                        .multiply(fuelConsumption.getPricePerLiterInEUR()));
             }
         });
 

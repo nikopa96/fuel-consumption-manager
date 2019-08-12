@@ -1,20 +1,20 @@
 package com.fuelconsumptionmanager.fuelconsumptionmanager.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.io.Serializable;
-import java.sql.Date;
+import java.math.BigDecimal;
+import java.util.Date;
 
 @Entity
 @Table(name = "fuel_consumption")
-@Getter
-@Setter
-public class FuelConsumption implements Serializable {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class FuelConsumption {
 
     @Id
     @SequenceGenerator(name = "my_seq", sequenceName = "fuel_consumption_seq", allocationSize = 1)
@@ -33,16 +33,16 @@ public class FuelConsumption implements Serializable {
     @NotNull
     @Positive
     @Column(name = "price_per_liter_in_eur")
-    private Float pricePerLiterInEUR;
+    private BigDecimal pricePerLiterInEUR;
 
     @NotNull
     @Positive
     @Column(name = "volume_in_liters")
-    private Float volumeInLiters;
+    private BigDecimal volumeInLiters;
 
     @Positive
     @Column(name = "total_price_in_eur")
-    private Float totalPriceInEUR;
+    private BigDecimal totalPriceInEUR;
 
     @NotNull
     @Column(name = "date")

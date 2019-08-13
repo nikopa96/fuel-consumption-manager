@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class ConsumptionCalculator {
 
-    private Map<String, BigDecimal> getMonthlyExpenseRecords(List<FuelConsumption> fuelConsumptions) {
+    private Map<String, BigDecimal> getMonthlyExpensesRecords(List<FuelConsumption> fuelConsumptions) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
 
         return fuelConsumptions.stream().collect(Collectors.groupingBy(fc -> simpleDateFormat.format(fc.getDate()),
@@ -21,7 +21,7 @@ public class ConsumptionCalculator {
     }
 
     public List<MonthlyExpense> getMoneyExpensesByMonths(List<FuelConsumption> fuelConsumptions) {
-        Map<String, BigDecimal> records = getMonthlyExpenseRecords(fuelConsumptions);
+        Map<String, BigDecimal> records = getMonthlyExpensesRecords(fuelConsumptions);
 
         return records.entrySet().stream().map(expense -> new MonthlyExpense(expense.getKey(), expense.getValue()))
                 .collect(Collectors.toList());

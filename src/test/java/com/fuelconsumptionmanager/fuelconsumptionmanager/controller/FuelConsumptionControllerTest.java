@@ -6,8 +6,9 @@ import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionRe
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.MonthlyExpense;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.repository.FuelConsumptionRepository;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.service.FuelConsumptionService;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,12 +23,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FuelConsumptionControllerTest {
+class FuelConsumptionControllerTest {
 
     @Autowired
     private FuelConsumptionService fuelConsumptionService;
@@ -37,8 +38,8 @@ public class FuelConsumptionControllerTest {
 
     private List<FuelConsumption> fuelConsumptions;
 
-    @Before
-    public void setUp() throws ParseException {
+    @BeforeEach
+    void setUp() throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         this.fuelConsumptions = new ArrayList<>();
 
@@ -51,19 +52,22 @@ public class FuelConsumptionControllerTest {
     }
 
     @Test
-    public void getAllFuelConsumptionsTest() {
+    @DisplayName("should return the correct number of fuel consumption objects")
+    void getAllFuelConsumptionsTest() {
         when(fuelConsumptionRepository.findAll()).thenReturn(fuelConsumptions);
         assertEquals(2, fuelConsumptionService.getAllFuelConsumptions().size());
     }
 
     @Test
-    public void getAllFuelConsumptionsByMonthNumberTest() {
+    @DisplayName("should return the correct number of fuel consumption objects by driver id")
+    void getAllFuelConsumptionsByMonthNumberTest() {
         when(fuelConsumptionRepository.findAllByMonthNumber(4)).thenReturn(fuelConsumptions);
         assertEquals(2, fuelConsumptionService.getAllFuelConsumptionsByMonthNumber(4).size());
     }
 
     @Test
-    public void getMonthlyExpensesTest() {
+    @DisplayName("should return the correct monthly expense")
+    void getMonthlyExpensesTest() {
         when(fuelConsumptionRepository.findAll()).thenReturn(fuelConsumptions);
 
         MonthlyExpense monthlyExpense = new MonthlyExpense("April", new BigDecimal("20.905"));
@@ -71,7 +75,8 @@ public class FuelConsumptionControllerTest {
     }
 
     @Test
-    public void getMonthlyFuelConsumptionTest() {
+    @DisplayName("should return the correct monthly fuel consumption report")
+    void getMonthlyFuelConsumptionTest() {
         when(fuelConsumptionRepository.findAll()).thenReturn(fuelConsumptions);
 
         FuelConsumptionReportRow aprilConsumptionsOF95 = new FuelConsumptionReportRow("95",
@@ -84,7 +89,8 @@ public class FuelConsumptionControllerTest {
     }
 
     @Test
-    public void addFuelConsumptionTest() {
+    @DisplayName("should return the total price of the added object")
+    void addFuelConsumptionTest() {
         FuelConsumption fuelConsumption = fuelConsumptions.get(0);
         fuelConsumption.setTotalPriceInEUR(null);
 
@@ -95,7 +101,8 @@ public class FuelConsumptionControllerTest {
     }
 
     @Test
-    public void addMultipleFuelConsumptionsTest() {
+    @DisplayName("should return the total prices of added objects in the list")
+    void addMultipleFuelConsumptionsTest() {
         FuelConsumption fuelConsumption1 = fuelConsumptions.get(0);
         fuelConsumption1.setTotalPriceInEUR(null);
 

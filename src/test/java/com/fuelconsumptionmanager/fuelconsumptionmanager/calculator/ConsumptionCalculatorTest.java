@@ -4,8 +4,8 @@ import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumption;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionReport;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionReportRow;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.MonthlyExpense;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -15,15 +15,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ConsumptionCalculatorTest {
+
+class ConsumptionCalculatorTest {
 
     private List<FuelConsumption> fuelConsumptions;
     private ConsumptionCalculator calculator;
 
-    @Before
-    public void setUp() throws ParseException {
+    @BeforeEach
+    void setUp() throws ParseException {
         this.fuelConsumptions = new ArrayList<>();
         this.calculator = new ConsumptionCalculator();
 
@@ -53,7 +54,7 @@ public class ConsumptionCalculatorTest {
     }
 
     @Test
-    public void getMoneyExpensesByMonthsTest() {
+    void getMoneyExpensesByMonthsTest() {
         List<MonthlyExpense> expenses = calculator.getMoneyExpensesByMonths(fuelConsumptions);
         Map<String, List<MonthlyExpense>> expensesByMonths = expenses.stream()
                 .collect(Collectors.groupingBy(MonthlyExpense::getMonth));
@@ -68,7 +69,7 @@ public class ConsumptionCalculatorTest {
     }
 
     @Test
-    public void getMonthlyFuelConsumptionReportsTest() {
+    void getMonthlyFuelConsumptionReportsTest() {
         List<FuelConsumptionReport> monthlyReports = calculator.getMonthlyFuelConsumptionReports(fuelConsumptions);
 
         Map<String, List<FuelConsumptionReport>> reports = monthlyReports.stream()

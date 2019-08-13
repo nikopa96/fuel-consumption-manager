@@ -5,6 +5,7 @@ import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionRe
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.FuelConsumptionReportRow;
 import com.fuelconsumptionmanager.fuelconsumptionmanager.model.MonthlyExpense;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -54,6 +55,7 @@ class ConsumptionCalculatorTest {
     }
 
     @Test
+    @DisplayName("should return the correct total spent amount of money")
     void getMoneyExpensesByMonthsTest() {
         List<MonthlyExpense> expenses = calculator.getMoneyExpensesByMonths(fuelConsumptions);
         Map<String, List<MonthlyExpense>> expensesByMonths = expenses.stream()
@@ -69,6 +71,7 @@ class ConsumptionCalculatorTest {
     }
 
     @Test
+    @DisplayName("should return the correct total prices, average prices and volumes")
     void getMonthlyFuelConsumptionReportsTest() {
         List<FuelConsumptionReport> monthlyReports = calculator.getMonthlyFuelConsumptionReports(fuelConsumptions);
 
